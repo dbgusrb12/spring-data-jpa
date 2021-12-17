@@ -6,7 +6,6 @@ import java.util.Date;
 @Entity
 public class Account {
 
-
     @Id // primary key 설정 어노테이션
     @GeneratedValue // seq 사용
     private Long id;
@@ -22,9 +21,16 @@ public class Account {
 
     private String yes;
 
-//    DB에 컬럼으로 추가 하고 싶지 않은 경우
+    // DB에 컬럼으로 추가 하고 싶지 않은 경우
     @Transient
     private String no;
+
+    @Embedded
+    // AttributeOverrides 로 해당 컬럼에 대한 name 을 변경 할 수 있다.
+    @AttributeOverrides({
+            @AttributeOverride(name = "street", column = @Column(name = "home_street"))
+    })
+    private Address address;
 
     public Long getId() {
         return id;

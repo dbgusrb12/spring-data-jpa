@@ -22,8 +22,11 @@ public class JpaRunner implements ApplicationRunner {
         account.setUsername("hyungyu");
         account.setPassword("email");
 
+        // jpa 사용
+//        entityManager.persist(account);
+
+        // hibernate api 사용
         Session session = entityManager.unwrap(Session.class);
         session.save(account);
-//        entityManager.persist(account);
     }
 }
