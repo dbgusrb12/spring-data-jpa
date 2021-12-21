@@ -1,5 +1,6 @@
 package com.example.demospringdata;
 
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +8,8 @@ import java.util.Set;
 @Entity
 public class Post {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     private String title;
