@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 public class JpaRunner implements ApplicationRunner {
 
     @Autowired
+    HibernateSample hibernateSample;
+
+    @Autowired
     JpaSample jpaSample;
 
 
@@ -19,28 +22,43 @@ public class JpaRunner implements ApplicationRunner {
         jpaSample.createAccountWithJpa();
 
         // Hibernate 사용하여 account 등록
-        jpaSample.createAccountWithHibernate();
+        hibernateSample.createAccountWithHibernate();
 
         // Account, Study 양방향 매핑 등록
-        jpaSample.createAccountAndStudy("hyungyu3");
+        hibernateSample.createAccountAndStudy("hyungyu3");
 
         // Entity Status 확인 (Transient, Persistent, Detached, Removed)
-        Account account = jpaSample.createAccountAndStudy("hyungyu4");
-        jpaSample.detachedToPersistent(account);
-
+        Account account = hibernateSample.createAccountAndStudy("hyungyu4");
+        hibernateSample.detachedToPersistent(account);
 
         // CascadeType.PERSIST 확인
-        Post post = jpaSample.cascadePersistentTest();
+        Post post = hibernateSample.cascadePersistentTest();
 
-//         CascadeType.REMOVE 확인
-        jpaSample.cascadeRemoveTest(post);
+        // CascadeType.REMOVE 확인
+        hibernateSample.cascadeRemoveTest(post);
 
-        Post fetchPost = jpaSample.cascadePersistentTest();
         // FetchType.EAGER 전략 확인
-        jpaSample.fetchEagerTest(fetchPost);
+        Post fetchEagerPost = hibernateSample.cascadePersistentTest();
+        hibernateSample.fetchEagerTest(fetchEagerPost);
 
         // FetchType.LAZY 전략 확인
-        jpaSample.fetchLazyTest(fetchPost);
+        Post fetchLazyPost = hibernateSample.cascadePersistentTest();
+        hibernateSample.fetchLazyTest(fetchLazyPost);
 
+        // JPA 사용하여 쿼리 생성 및 실행 확인
+        hibernateSample.cascadePersistentTest();
+        jpaSample.getPostsByCreateQuery();
+
+        // JPA CriteriaBuilder 를 사용하여 Type safety 쿼리 생성 및 실행 확인
+        hibernateSample.cascadePersistentTest();
+        jpaSample.getPostsByCreateQueryCriteria();
+
+        // JPA namedQuery 를 사용하여 쿼리 생성 및 실행 확인
+        hibernateSample.cascadePersistentTest();
+        jpaSample.getPostsByNamedQuery();
+
+        // JPA nativeQuery 를 사용하여 쿼리 생성 및 실행 확인
+        hibernateSample.cascadePersistentTest();
+        jpaSample.getPostsByNativeQuery();
     }
 }

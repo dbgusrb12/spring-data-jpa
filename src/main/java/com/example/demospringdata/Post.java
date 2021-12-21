@@ -5,6 +5,10 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@NamedQueries({
+        @NamedQuery(name = "all_post", query = "SELECT p FROM Post AS p")
+})
+
 @Entity
 public class Post {
 
@@ -52,5 +56,12 @@ public class Post {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "title='" + title + '\'' +
+                '}';
     }
 }
