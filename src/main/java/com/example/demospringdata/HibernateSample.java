@@ -1,5 +1,9 @@
 package com.example.demospringdata;
 
+import com.example.demospringdata.entity.Account;
+import com.example.demospringdata.entity.Comment;
+import com.example.demospringdata.entity.Post;
+import com.example.demospringdata.entity.Study;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 

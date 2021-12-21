@@ -1,4 +1,4 @@
-package com.example.demospringdata;
+package com.example.demospringdata.entity;
 
 
 import javax.persistence.*;

@@ -1,10 +1,11 @@
 package com.example.demospringdata;
 
+import com.example.demospringdata.entity.Account;
+import com.example.demospringdata.entity.Post;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -48,7 +49,8 @@ public class JpaSample {
         Root<Post> root = query.from(Post.class);
         query.select(root);
 
-        List<Post> posts = entityManager.createQuery(query).getResultList();
+        List<Post> posts = entityManager.createQuery(query)
+                .getResultList();
         posts.forEach(System.out::println);
     }
 
@@ -65,7 +67,8 @@ public class JpaSample {
      * JPA nativeQuery 를 사용하여 쿼리 생성 (실제 쿼리문과 동일한 문법의 쿼리 작성)
      */
     public void getPostsByNativeQuery() {
-        List<Post> posts = entityManager.createNativeQuery("SELECT * FROM POST", Post.class).getResultList();
+        List<Post> posts = entityManager.createNativeQuery("SELECT * FROM POST", Post.class)
+                .getResultList();
         posts.forEach(System.out::println);
     }
 }
