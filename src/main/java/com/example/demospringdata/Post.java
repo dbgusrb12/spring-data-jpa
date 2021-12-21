@@ -16,7 +16,10 @@ public class Post {
     // 해당 Post 객체가 persistent 상태로 변경 될 때 참조되는 Comment 리스트 객체들도 persistent 상태로 전파된다.
     // 해당 Post 객체가 removed 상태로 변경 될 때 참조되는 Comment 리스트 객체들도 removed 상태로 전파된다.
 //    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    // 모든 상태를 전파 시키는 옵션
+
+    // 모든 상태를 전파 시키는 옵션 (CascadeType.ALL)
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    // FETCH 전략을 설정하는 것 (OneToMany 는 default 가 LAZY, ManyToOne 은 default 가 EAGER)
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<Comment> comments = new HashSet<>();
 
