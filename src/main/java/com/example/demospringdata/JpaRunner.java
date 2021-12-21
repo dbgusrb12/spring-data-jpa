@@ -24,7 +24,10 @@ public class JpaRunner implements ApplicationRunner {
 
         Study study = new Study();
         study.setName("Spring Data JPA");
-        study.setOwner(account);
+
+        // 객체 지향 적인 코드를 위해 두 객체를 서로 매핑 해주는 메서드를 만든다.
+        account.addStudy(study);
+
         // jpa 사용
 //        entityManager.persist(account);
 

@@ -2,6 +2,8 @@ package com.example.demospringdata;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -15,6 +17,12 @@ public class Account {
 
     // 기본적으로 모든 멤버 변수에는 column 어노테이션이 추가된다.
     private String password;
+
+    // Collection 일 때는 OneToMany, 단일 객체일 때는 ManyToOne
+    // 양방향 관계를 정의 할 때는 OneToMany 에 mappedBy 로 주인의 관계를 설정해야 한다.
+    // mappedBy 를 정의하지 않으면 단방향 관계가 2개인 것
+    @OneToMany(mappedBy = "owner")
+    private Set<Study> studies = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -40,8 +48,25 @@ public class Account {
         this.password = password;
     }
 
+    public Set<Study> getStudies() {
+        return studies;
+    }
 
-//    // Temporal 어노테이션으로 날짜의 타입을 지정 할 수 있다. (날짜만, 시간만, 날짜 시간 전부)
+    public void setStudies(Set<Study> studies) {
+        this.studies = studies;
+    }
+
+    public void addStudy(Study study) {
+        this.getStudies().add(study);
+        study.setOwner(this);
+    }
+
+    public void removeStudy(Study study) {
+        this.getStudies().remove(study);
+        study.setOwner(null);
+    }
+
+    //    // Temporal 어노테이션으로 날짜의 타입을 지정 할 수 있다. (날짜만, 시간만, 날짜 시간 전부)
 //    @Temporal(TemporalType.TIME)
 //    private Date created = new Date();
 //
