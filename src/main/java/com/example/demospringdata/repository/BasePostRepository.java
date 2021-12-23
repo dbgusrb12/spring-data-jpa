@@ -12,8 +12,8 @@ import java.util.List;
  * 초기 JPA 를 사용하여 repository 를 구현 했을 때는
  * 일반적인 기능들을 전부 만들어서 구현을 했다.
  */
-//@Repository
-//@Transactional
+@Repository
+@Transactional
 public class BasePostRepository {
 
     @PersistenceContext
