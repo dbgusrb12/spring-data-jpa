@@ -21,6 +21,12 @@ public interface MyRepository<T, ID extends Serializable> extends Repository<T, 
 
     List<T> findAll();
 
+    /**
+     * Optional api 를 사용하여 Null 처리가 가능하다.
+     * @param id
+     * @param <E>
+     * @return
+     */
     @Nullable
     <E extends T> Optional<E> findById(ID id);
 
