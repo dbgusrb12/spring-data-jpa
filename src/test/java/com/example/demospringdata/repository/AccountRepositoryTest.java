@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -31,6 +33,18 @@ public class AccountRepositoryTest {
         // Then
         List<Account> all = accountRepository.findAll();
         assertThat(all.size()).isEqualTo(1);
+
+        // When
+        List<Account> hyun = accountRepository.findByUsernameContains("hyun");
+
+        // Then
+        assertThat(hyun.size()).isEqualTo(1);
+
+        // When
+        Page<Account> pageAccount = accountRepository.findByLikeCountGreaterThanOrderByIdDesc(-1, PageRequest.of(0, 5));
+
+        // Then
+        assertThat(pageAccount.getTotalElements()).isEqualTo(1);
     }
 
     @Test
@@ -38,6 +52,6 @@ public class AccountRepositoryTest {
         Optional<Account> byId = accountRepository.findById(100l);
         assertThat(byId).isEmpty();
 //        Account account = byId.orElseThrow(IllegalArgumentException::new);
-
     }
+
 }

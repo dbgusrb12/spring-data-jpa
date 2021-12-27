@@ -23,6 +23,16 @@ public class Account {
     @OneToMany(mappedBy = "owner")
     private Set<Study> studies = new HashSet<>();
 
+    private int likeCount;
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
     public Long getId() {
         return id;
     }
