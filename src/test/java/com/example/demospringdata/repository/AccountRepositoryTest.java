@@ -33,18 +33,6 @@ public class AccountRepositoryTest {
         // Then
         List<Account> all = accountRepository.findAll();
         assertThat(all.size()).isEqualTo(1);
-
-        // When
-        List<Account> hyun = accountRepository.findByUsernameContains("hyun");
-
-        // Then
-        assertThat(hyun.size()).isEqualTo(1);
-
-        // When
-        Page<Account> pageAccount = accountRepository.findByLikeCountGreaterThanOrderByIdDesc(-1, PageRequest.of(0, 5));
-
-        // Then
-        assertThat(pageAccount.getTotalElements()).isEqualTo(1);
     }
 
     @Test
@@ -52,6 +40,36 @@ public class AccountRepositoryTest {
         Optional<Account> byId = accountRepository.findById(100l);
         assertThat(byId).isEmpty();
 //        Account account = byId.orElseThrow(IllegalArgumentException::new);
+    }
+
+    @Test
+    public void findContainsTest() {
+        // Given
+        Account account = new Account();
+        account.setUsername("hyungyu");
+        account.setPassword("pass");
+        accountRepository.save(account);
+
+        // When
+        List<Account> hyun = accountRepository.findByUsernameContains("hyun");
+
+        // Then
+        assertThat(hyun.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void pageTest() {
+        // Given
+        Account account = new Account();
+        account.setUsername("hyungyu");
+        account.setPassword("pass");
+        accountRepository.save(account);
+
+        // When
+        Page<Account> pageAccount = accountRepository.findByLikeCountGreaterThanOrderByIdDesc(-1, PageRequest.of(0, 5));
+
+        // Then
+        assertThat(pageAccount.getTotalElements()).isEqualTo(1);
     }
 
 }
