@@ -4,6 +4,8 @@ import com.example.demospringdata.entity.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.RepositoryDefinition;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.util.concurrent.ListenableFuture;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -53,7 +55,7 @@ public interface CommentRepository {
     Page<Comment> findByCommentContainsIgnoreCase(String keyword, Pageable pageable);
 
     /**
-     * paging 처리 된 리스트를 Stream을 사용해 받을 수 있다.
+     * paging 처리 된 리스트를 Stream 을 사용해 받을 수 있다.
      *
      * @param keyword
      * @param pageable
@@ -61,4 +63,13 @@ public interface CommentRepository {
      */
     Stream<Comment> findByCommentContainsIgnoreCaseAndLikeCountGreaterThan(String keyword, Integer likeCount, Pageable pageable);
 
+    /**
+     * Async 어노테이션을 사용하여 별도의 thread 로 동작하게 할 수 있다. (@EnableAsync 을 메인 클래스 위에 붙여줘야 사용 가능하다.)
+     * 하지만, 테스트 코드 작성하기가 굉장히 어렵고, Async 어노테이션이 제대로 동작 하지 않는다고 한다. (비추천)
+     *
+     * @param keyword
+     * @return
+     */
+    @Async
+    ListenableFuture<List<Comment>> findByCommentContainsIgnoreCase(String keyword);
 }

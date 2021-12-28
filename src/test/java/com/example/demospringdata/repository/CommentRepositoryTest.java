@@ -9,8 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -101,6 +104,30 @@ public class CommentRepositoryTest {
             Comment comment = streamComments.findFirst().get();
             assertThat(comment.getLikeCount()).isEqualTo(100);
         }
+    }
+
+    @Test
+    public void asyncTest() throws ExecutionException, InterruptedException {
+        this.createComment(100, "spring data jpa");
+        this.createComment(50, "Spring - hibernate");
+        ListenableFuture<List<Comment>> future = commentRepository.findByCommentContainsIgnoreCase("Spring");
+        System.out.println("===========");
+        System.out.println("is done? " + future.isDone());
+
+        future.addCallback(new ListenableFutureCallback<List<Comment>>() {
+            @Override
+            public void onFailure(Throwable ex) {
+                System.out.println(ex);
+            }
+
+            @Override
+            public void onSuccess(List<Comment> result) {
+                // Sout 이 안찍히는 이유? => Main Thread 가 종료되었기 때문에
+                System.out.println("======= Async =======");
+                System.out.println(result.size());
+                result.forEach(System.out::println);
+            }
+        });
     }
 
     private void createComment(int likeCount, String comment) {
