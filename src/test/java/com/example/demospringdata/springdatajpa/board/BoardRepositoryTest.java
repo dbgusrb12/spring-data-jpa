@@ -57,4 +57,50 @@ public class BoardRepositoryTest {
         List<Board> all = boardRepository.findAll();
         assertThat(all.size()).isEqualTo(1);
     }
+
+    @Test
+    public void findByTitleStartsWith() {
+        this.saveBoard();
+
+        List<Board> spring = boardRepository.findByTitleStartsWith("Spring");
+        assertThat(spring.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void findByTitleWithNamedQuery() {
+        this.saveBoard();
+
+        List<Board> spring = boardRepository.findByTitleWithNamedQuery("Spring Data Jpa");
+        assertThat(spring.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void findByTitleWithNamedNativeQuery() {
+        this.saveBoard();
+
+        List<Board> spring = boardRepository.findByTitleWithNamedNativeQuery("Spring Data Jpa");
+        assertThat(spring.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void findByTitleWithQueryAnnotation() {
+        this.saveBoard();
+
+        List<Board> spring = boardRepository.findByTitleWithQueryAnnotation("Spring Data Jpa");
+        assertThat(spring.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void findByTitleWithNativeQuery() {
+        this.saveBoard();
+
+        List<Board> spring = boardRepository.findByTitleWithNativeQuery("Spring Data Jpa");
+        assertThat(spring.size()).isEqualTo(1);
+    }
+
+    private void saveBoard() {
+        Board board = new Board();
+        board.setTitle("Spring Data Jpa");
+        boardRepository.save(board);
+    }
 }

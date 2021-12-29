@@ -4,6 +4,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+// JPQL 방식
+@NamedQuery(name = "Board.findByTitleWithNamedQuery", query = "SELECT b FROM Board AS b WHERE b.title = ?1")
+// Native Query 방식
+@NamedNativeQuery(name = "Board.findByTitleWithNamedNativeQuery", query = "SELECT * FROM BOARD WHERE title = ?1", resultClass = Board.class)
 public class Board {
 
     @Id @GeneratedValue
