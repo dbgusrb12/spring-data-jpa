@@ -111,6 +111,14 @@ public class BoardRepositoryTest {
         assertThat(notPropertiesInSpring.size()).isEqualTo(1);
     }
 
+    @Test
+    public void findByTitleWithNamedParameter() {
+        this.saveBoard();
+
+        List<Board> spring = boardRepository.findByTitleWithNamedParameter("Spring Data Jpa");
+        assertThat(spring.size()).isEqualTo(1);
+    }
+
     private void saveBoard() {
         Board board = new Board();
         board.setTitle("Spring Data Jpa");
