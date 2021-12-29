@@ -4,12 +4,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+// Bean 설정 파일을 import 해서 해당 Bean 이 Test 코드에서도 주입 될 수 있게 한다.
+@Import(NoticeRepositoryTestConfig.class)
 public class NoticeRepositoryTest {
 
     @Autowired
@@ -17,6 +21,27 @@ public class NoticeRepositoryTest {
 
     @Autowired
     DefaultNoticeRepository defaultNoticeRepository;
+
+    @Autowired
+    ApplicationContext applicationContext;
+
+    @Test
+    public void event() {
+        Notice notice = new Notice();
+        notice.setTitle("event");
+        noticeRepository.save(notice);
+
+        NoticePublishedEvent event = new NoticePublishedEvent(notice);
+        applicationContext.publishEvent(event);
+    }
+
+    @Test
+    public void springDataEventTest() {
+        Notice notice = new Notice();
+        notice.setTitle("hibernate");
+
+        noticeRepository.save(notice.publish());
+    }
 
     @Test
     public void crud() {
