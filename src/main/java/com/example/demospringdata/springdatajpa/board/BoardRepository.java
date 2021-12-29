@@ -1,5 +1,6 @@
 package com.example.demospringdata.springdatajpa.board;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -23,4 +24,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query(value = "SELECT * FROM BOARD WHERE title = ?1", nativeQuery = true)
     List<Board> findByTitleWithNativeQuery(String title);
 
+    @Query("SELECT b FROM Board AS b WHERE b.title = ?1")
+    List<Board> findByTitleOrderByTitle(String title, Sort sort);
 }

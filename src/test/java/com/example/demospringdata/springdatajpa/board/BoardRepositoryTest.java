@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
@@ -96,6 +98,17 @@ public class BoardRepositoryTest {
 
         List<Board> spring = boardRepository.findByTitleWithNativeQuery("Spring Data Jpa");
         assertThat(spring.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void findByTitleOrderByTitle() {
+        this.saveBoard();
+
+        List<Board> spring = boardRepository.findByTitleOrderByTitle("Spring Data Jpa", Sort.by("title"));
+        assertThat(spring.size()).isEqualTo(1);
+        // JpaSort 라는 클래스를 사용하여, DB 에서 사용하는 함수를 호출 할 수 있다.
+        List<Board> notPropertiesInSpring = boardRepository.findByTitleOrderByTitle("Spring Data Jpa", JpaSort.unsafe("LENGTH(title)"));
+        assertThat(notPropertiesInSpring.size()).isEqualTo(1);
     }
 
     private void saveBoard() {
