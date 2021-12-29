@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -119,9 +120,52 @@ public class BoardRepositoryTest {
         assertThat(spring.size()).isEqualTo(1);
     }
 
-    private void saveBoard() {
+    @Test
+    public void updateTitle() {
+        Board spring = this.saveBoard();
+
+        String hibernate = "hibernate";
+        int update = boardRepository.updateTitle(hibernate, spring.getId());
+        assertThat(update).isEqualTo(1);
+
+        // 해당 테스트가 실패하는 이유?
+        // Transaction 이 끝나지 않았기 때문에, 해당 객체는 아직 Persistent Context 에 캐싱이 되어있고,
+        // hibernate 1차 캐싱으로 인해 캐시에 남아있는 데이터를 가져온다.
+        // 때문에 Select 쿼리가 발생하지 않고, title 이 여전히 Spring Data Jpa 이다.
+        Optional<Board> byId = boardRepository.findById(spring.getId());
+        assertThat(byId.get().getTitle()).isEqualTo(hibernate);
+    }
+
+    @Test
+    public void updateBoardTitle() {
+        Board spring = this.saveBoard();
+
+        String hibernate = "hibernate";
+        // Modifying 어노테이션의 clearAutomatically 를 true 로 설정해서, 해당 쿼리가 발생 한 후 캐시를 지워준다.
+        int update = boardRepository.updateBoardTitle(hibernate, spring.getId());
+        assertThat(update).isEqualTo(1);
+
+        Optional<Board> byId = boardRepository.findById(spring.getId());
+        assertThat(byId.get().getTitle()).isEqualTo(hibernate);
+    }
+
+    @Test
+    public void updateTitleWithoutRepository() {
+        // UPDATE 쿼리를 직접 만들어서 사용하는건 권장하지 않는다. 왜?
+        // 명시적으로 UPDATE 쿼리를 실행 하지 않아도,
+        // 로직을 통해 쉽고 간단하게 데이터의 변경을 DB에 반영이 되도록 hibernate 가 제공해주는데
+        // 위의 두 테스트 예제처럼 flush 나 clear 를 사용해 복잡하게 UPDATE 를 실행 할 필요가 없다.
+
+        Board spring = this.saveBoard();
+        spring.setTitle("hibernate");
+
+        List<Board> all = boardRepository.findAll();
+        assertThat(all.get(0).getTitle()).isEqualTo("hibernate");
+    }
+
+    private Board saveBoard() {
         Board board = new Board();
         board.setTitle("Spring Data Jpa");
-        boardRepository.save(board);
+        return boardRepository.save(board);
     }
 }

@@ -2,6 +2,7 @@ package com.example.demospringdata.springdatajpa.board;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -33,4 +34,15 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     // SpEL (Spring Expression Language) 를 사용하여 엔티티의 이름을 직접 작성 할 필요 없이 가져다 쓸 수 있다.
     @Query("SELECT b FROM #{#entityName} AS b WHERE b.title = :title")
     List<Board> findByTitleWithNamedParameter(@Param("title") String keyword);
+
+    // Modifying 어노테이션을 사용해 update 쿼리라는걸 명시해준다.
+    @Modifying
+    @Query("UPDATE Board b SET b.title = ?1 WHERE b.id = ?2")
+    int updateTitle(String title, Long id);
+
+    // clearAutomatically 의 값을 true 로 설정하면 해당 쿼리를 실행 하고 난 뒤, 캐시를 비워준다.
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Board b SET b.title = ?1 WHERE b.id = ?2")
+    int updateBoardTitle(String title, Long id);
+
 }
