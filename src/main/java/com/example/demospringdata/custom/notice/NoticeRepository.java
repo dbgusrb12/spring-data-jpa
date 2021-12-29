@@ -1,6 +1,5 @@
 package com.example.demospringdata.custom.notice;
 
-import com.example.demospringdata.custom.MyRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
