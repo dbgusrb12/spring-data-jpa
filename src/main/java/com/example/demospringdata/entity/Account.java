@@ -1,6 +1,8 @@
 package com.example.demospringdata.entity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -75,10 +77,13 @@ public class Account {
         study.setOwner(null);
     }
 
-    //    // Temporal 어노테이션으로 날짜의 타입을 지정 할 수 있다. (날짜만, 시간만, 날짜 시간 전부)
-//    @Temporal(TemporalType.TIME)
+    // Temporal 어노테이션으로 날짜의 타입을 지정 할 수 있다. (날짜만, 시간만, 날짜 시간 전부)
+//    @Temporal(TemporalType.TIMESTAMP)
 //    private Date created = new Date();
-//
+
+    // JPA 2.2 이상부터 java8에 DateTime 클래스 지원 (LocalData, LocalTime, LocalDateTime)
+    private LocalDateTime created;
+
 //    private String yes;
 //
 //    // DB에 컬럼으로 추가 하고 싶지 않은 경우
