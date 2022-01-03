@@ -3,6 +3,7 @@ package com.example.demospringdata.springdatajpa.board;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
@@ -17,5 +18,8 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     // 직접 EntityGraph 를 선언 할 때
     @EntityGraph(attributePaths = "board")
     Optional<Reply> getReplyByIdOrderByIdAsc(Long id);
+
+    // Overriding 이 안될 때, 해당 타입을 매개변수로 받아서 사용 할 수 있다. (다이나믹 프로젝션)
+    <T> List<T> findByBoard_Id(Long id, Class<T> clazz);
 
 }
